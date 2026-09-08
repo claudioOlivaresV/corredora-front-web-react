@@ -5,7 +5,7 @@ export const Login = () => {
     <main className="w-full max-w-[480px] mx-auto px-margin-mobile md:px-0 flex flex-col gap-section-gap">
       <header className="flex flex-col items-center gap-stack-md text-center">
         <h1 className="font-headline-lg text-headline-lg tracking-[0.2em] uppercase text-primary">
-          AESTHET
+          Corredora Propiedades CAOV
         </h1>
 
         <p className="font-body-lg text-body-lg text-on-surface-variant">
