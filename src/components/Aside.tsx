@@ -1,3 +1,4 @@
+import { useAside } from "../hooks/useAside";
 import {
   BriefcaseBusiness,
   Building2,
@@ -53,6 +54,7 @@ interface MenuProps {
 }
 
 export const Aside = ({ onNavigate }: MenuProps) => {
+  const { handleLogout, user } = useAside();
   return (
     <div className="flex h-full flex-col justify-between">
       <div className="flex flex-col">
@@ -96,20 +98,17 @@ export const Aside = ({ onNavigate }: MenuProps) => {
         <div className="flex items-center justify-between">
           <div className="flex flex-col">
             <span className="font-body-md text-body-md font-medium text-obsidian">
-              Admin User
+              {user?.name}
             </span>
 
             <span className="font-caption text-caption text-on-surface-variant">
-              Director General
+              {user?.role}
             </span>
           </div>
-
-          <span className="rounded bg-sand/60 px-2 py-0.5 font-label-caps text-label-caps uppercase text-secondary">
-            PRO
-          </span>
         </div>
 
         <button
+          onClick={handleLogout}
           type="button"
           className="flex items-center gap-2 pt-2 text-left font-caption text-caption text-on-surface-variant transition-colors hover:text-error"
         >

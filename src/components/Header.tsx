@@ -1,10 +1,15 @@
+import type { RootState } from "../store/store";
 import { Bell, Menu, Search } from "lucide-react";
+import { use } from "react";
+import { useSelector } from "react-redux";
 
 interface HeaderProps {
   onMenuClick: () => void;
 }
 
 export const Header = ({ onMenuClick }: HeaderProps) => {
+  const user = useSelector((state: RootState) => state.auth.user);
+  console.log(user);
   return (
     <header className="fixed right-0 top-0 z-40 flex h-16 w-full items-center justify-between border-b border-outline-variant/30 bg-surface/95 px-6 backdrop-blur lg:left-72 lg:w-[calc(100%-18rem)]">
       <div className="flex items-center gap-4">
@@ -48,17 +53,7 @@ export const Header = ({ onMenuClick }: HeaderProps) => {
         {/* Usuario */}
         <div className="flex items-center gap-3">
           <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary text-sm font-medium text-white">
-            AU
-          </div>
-
-          <div className="hidden flex-col sm:flex">
-            <span className="text-sm font-medium text-on-surface">
-              Admin User
-            </span>
-
-            <span className="text-xs text-on-surface-variant">
-              Director General
-            </span>
+            {user?.name.charAt(0).toUpperCase() || "U"}
           </div>
         </div>
       </div>
