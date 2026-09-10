@@ -18,3 +18,13 @@ export type RequestLogin = {
   email: string;
   password: string;
 };
+export type UserRole = "ADMIN" | "CORREDOR" | "ARRENDADOR" | "ARRENDATARIO";
+
+export type UserStatus = "ACTIVO" | "INACTIVO" | "PENDIENTE";
+
+export interface UserFormData {
+  name: string;
+  email: string;
+  role: UserRole;
+  status: UserStatus;
+}

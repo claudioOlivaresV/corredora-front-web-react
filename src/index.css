@@ -58,6 +58,13 @@
   --color-on-tertiary-container: #7a8778;
   --color-on-secondary-fixed: #1e1c11;
   --color-tertiary: #000000;
+  --color-obsidian: #1a1c1c;
+  --color-copper: #b87333;
+  --color-jasper: #8f4a2f;
+  --color-sand: #e9e2d1;
+  --color-muted-forest: #4f6354;
+
+  --spacing-max-width: 1440px;
 
   /* =========================
      SPACING
