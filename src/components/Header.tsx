@@ -1,6 +1,5 @@
 import type { RootState } from "../store/store";
 import { Bell, Menu, Search } from "lucide-react";
-import { use } from "react";
 import { useSelector } from "react-redux";
 
 interface HeaderProps {
