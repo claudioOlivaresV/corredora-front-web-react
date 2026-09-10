@@ -4,6 +4,7 @@ import { PrivateLayout } from "../layouts/PrivateLayout";
 import ProtectedRoute from "./ProtectedRoute";
 import { Dashboard } from "../pages/dashboard/Dashboard";
 import { Login } from "../pages/auth/Login";
+import { Users } from "../pages/users/Users";
 
 const AppRoutes = () => {
   return (
@@ -15,6 +16,7 @@ const AppRoutes = () => {
       <Route element={<ProtectedRoute />}>
         <Route element={<PrivateLayout />}>
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/users" element={<Users />} />
           {/* 
           <Route path="/properties" element={<div>Properties</div>} />
 
