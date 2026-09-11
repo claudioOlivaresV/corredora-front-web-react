@@ -28,3 +28,16 @@ export interface UserFormData {
   role: UserRole;
   status: UserStatus;
 }
+
+export interface ErrorStateProps {
+  onRetry: () => void;
+  isRetrying?: boolean;
+}
+export interface UserResponseTable {
+  id: number;
+  name: string;
+  email: string;
+  role: UserRole;
+  active: boolean;
+  created_at: string;
+}

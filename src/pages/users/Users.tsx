@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { UsersHeader } from "../../components/user/UserHeader";
 import { UserDrawer } from "./UserDrawer";
+import { UsersTable } from "../../components/user/UsersTable";
+import { ToastMessage } from "../../components/shared/ToastMessage";
 
 export const Users = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -11,6 +13,7 @@ export const Users = () => {
     <div className="flex flex-col w-full">
       <div className="mx-auto flex w-full max-w-max-width flex-col gap-stack-lg px-4 py-4">
         <UsersHeader onCreate={handleCreate} />
+        <UsersTable />
         {/* <UsersKpiCards />
     <UsersFilters />
     <UsersTable /> */}
@@ -22,6 +25,7 @@ export const Users = () => {
       />
       {/* <UserDrawer />
   <ApiStatusToast /> */}
+      <ToastMessage message={"hola"} />
     </div>
   );
 };
