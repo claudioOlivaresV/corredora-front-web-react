@@ -1,9 +1,12 @@
 import { useMemo, useState } from "react";
-import { getUsuario } from "../services/getUsuario.services";
 import { useQuery } from "@tanstack/react-query";
+import { getUsuario } from "../services/getUsuario.services";
+
 const PAGE_SIZE = 10;
+
 export const useUsersTable = () => {
   const [currentPage, setCurrentPage] = useState(1);
+  const [search, setSearch] = useState("");
 
   const query = useQuery({
     queryKey: ["users"],
@@ -13,20 +16,32 @@ export const useUsersTable = () => {
     refetchOnReconnect: false,
   });
 
-  const users = query.data ?? [];
+  const filteredUsers = useMemo(() => {
+    const users = query.data ?? [];
+    const querySearch = search.trim().toLowerCase();
 
-  const totalPages = Math.ceil(users.length / PAGE_SIZE);
+    if (!querySearch) {
+      return users;
+    }
+
+    return users.filter((user) =>
+      user.name.toLowerCase().includes(querySearch),
+    );
+  }, [query.data, search]);
+
+  const totalPages = Math.ceil(filteredUsers.length / PAGE_SIZE);
 
   const paginatedUsers = useMemo(() => {
     const start = (currentPage - 1) * PAGE_SIZE;
     const end = start + PAGE_SIZE;
 
-    return users.slice(start, end);
-  }, [users, currentPage]);
+    return filteredUsers.slice(start, end);
+  }, [filteredUsers, currentPage]);
 
   const goToPage = (page: number) => {
-    setCurrentPage(Math.min(Math.max(page, 1), totalPages));
+    setCurrentPage(Math.min(Math.max(page, 1), Math.max(totalPages, 1)));
   };
+
   const formatDate = (date: string) => {
     return new Date(date).toLocaleString("es-CL", {
       day: "2-digit",
@@ -39,9 +54,11 @@ export const useUsersTable = () => {
 
   return {
     users: paginatedUsers,
+    search,
+    setSearch,
     currentPage,
     totalPages,
-    totalUsers: users.length,
+    totalUsers: filteredUsers.length,
     pageSize: PAGE_SIZE,
     goToPage,
     isLoading: query.isLoading,

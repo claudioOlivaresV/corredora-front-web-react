@@ -4,6 +4,7 @@ import { ErrorState } from "../shared/ErrorState";
 import { Loading } from "../shared/Loading";
 import type { UserResponseTable } from "../../shared/types/types";
 import { UsersKpiCards } from "./UsersKpi";
+import { UsersFilters } from "./UsersFilters";
 
 export const UsersTable = () => {
   const {
@@ -16,6 +17,8 @@ export const UsersTable = () => {
     retry,
     isRetrying,
     formatDate,
+    search,
+    setSearch,
   } = useUsersTable();
 
   if (isLoading) {
@@ -27,6 +30,7 @@ export const UsersTable = () => {
   return (
     <>
       <UsersKpiCards users={users} />
+      <UsersFilters search={search} onSearchChange={setSearch} />
       <div className="overflow-hidden rounded bg-surface-container-lowest shadow-sm">
         <div className="overflow-x-auto">
           <table className="w-full border-collapse text-left">

@@ -2,7 +2,6 @@ import { useState } from "react";
 import { UsersHeader } from "../../components/user/UserHeader";
 import { UserDrawer } from "./UserDrawer";
 import { UsersTable } from "../../components/user/UsersTable";
-import { ToastMessage } from "../../components/shared/ToastMessage";
 
 export const Users = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -25,7 +24,6 @@ export const Users = () => {
       />
       {/* <UserDrawer />
   <ApiStatusToast /> */}
-      <ToastMessage message={"hola"} />
     </div>
   );
 };
