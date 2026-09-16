@@ -25,8 +25,8 @@ export type UserStatus = "ACTIVO" | "INACTIVO" | "PENDIENTE";
 export interface UserFormData {
   name: string;
   email: string;
-  role: UserRole;
-  status: UserStatus;
+  password?: string;
+  role: string;
 }
 
 export interface ErrorStateProps {
