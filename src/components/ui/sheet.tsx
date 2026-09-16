@@ -5,8 +5,24 @@ import { cn } from "cn";
 import { Button } from "./button";
 import { XIcon } from "lucide-react";
 
-function Sheet({ ...props }: SheetPrimitive.Root.Props) {
-  return <SheetPrimitive.Root data-slot="sheet" {...props} />;
+function Sheet({ onOpenChange, ...props }: SheetPrimitive.Root.Props) {
+  return (
+    <SheetPrimitive.Root
+      data-slot="sheet"
+      {...props}
+      onOpenChange={(open, eventDetails) => {
+        if (
+          !open &&
+          (eventDetails.reason === "outside-press" ||
+            eventDetails.reason === "escape-key")
+        ) {
+          return;
+        }
+
+        onOpenChange?.(open, eventDetails);
+      }}
+    />
+  );
 }
 
 function SheetTrigger({ ...props }: SheetPrimitive.Trigger.Props) {
@@ -47,6 +63,7 @@ function SheetContent({
   return (
     <SheetPortal>
       <SheetOverlay />
+
       <SheetPrimitive.Popup
         data-slot="sheet-content"
         data-side={side}
@@ -57,6 +74,7 @@ function SheetContent({
         {...props}
       >
         {children}
+
         {showCloseButton && (
           <SheetPrimitive.Close
             data-slot="sheet-close"
@@ -127,6 +145,8 @@ export {
   Sheet,
   SheetTrigger,
   SheetClose,
+  SheetPortal,
+  SheetOverlay,
   SheetContent,
   SheetHeader,
   SheetFooter,

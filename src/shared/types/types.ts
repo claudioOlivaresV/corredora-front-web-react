@@ -41,3 +41,25 @@ export interface UserResponseTable {
   active: boolean;
   created_at: string;
 }
+export interface CreateEditUser {
+  id?: number;
+  email: string;
+  name: string;
+  role_id: number;
+  password?: string;
+}
+
+export const roleMap: Record<string, number> = {
+  CORREDOR: 2,
+  ARRENDADOR: 3,
+  ARRENDATARIO: 4,
+};
+
+export interface IResponseCreateUser {
+  id: number;
+  name: string;
+  email: string;
+  role_id: number;
+  active: boolean;
+  created_at: string;
+}

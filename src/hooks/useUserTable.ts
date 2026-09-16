@@ -1,12 +1,21 @@
 import { useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { getUsuario } from "../services/getUsuario.services";
+import type { UserResponseTable } from "../shared/types/types";
 
 const PAGE_SIZE = 10;
 
 export const useUsersTable = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [search, setSearch] = useState("");
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [selectedUser, setSelectedUser] = useState<UserResponseTable | null>(
+    null,
+  );
+  const handleEdit = (user: UserResponseTable) => {
+    setSelectedUser(user);
+    setDrawerOpen(true);
+  };
 
   const query = useQuery({
     queryKey: ["users"],
@@ -66,5 +75,9 @@ export const useUsersTable = () => {
     retry: query.refetch,
     isRetrying: query.isFetching,
     formatDate,
+    drawerOpen,
+    selectedUser,
+    handleEdit,
+    setDrawerOpen,
   };
 };

@@ -5,6 +5,7 @@ import { Loading } from "../shared/Loading";
 import type { UserResponseTable } from "../../shared/types/types";
 import { UsersKpiCards } from "./UsersKpi";
 import { UsersFilters } from "./UsersFilters";
+import { UserDrawer } from "../../pages/users/UserDrawer";
 
 export const UsersTable = () => {
   const {
@@ -19,6 +20,10 @@ export const UsersTable = () => {
     formatDate,
     search,
     setSearch,
+    drawerOpen,
+    selectedUser,
+    handleEdit,
+    setDrawerOpen,
   } = useUsersTable();
 
   if (isLoading) {
@@ -133,6 +138,7 @@ export const UsersTable = () => {
                         <button
                           type="button"
                           title="Editar usuario"
+                          onClick={() => handleEdit(user)}
                           className="rounded p-2 text-on-surface-variant transition-colors hover:bg-surface-container hover:text-obsidian"
                         >
                           <Edit size={18} />
@@ -171,6 +177,11 @@ export const UsersTable = () => {
           </div>
         </div>
       </div>
+      <UserDrawer
+        open={drawerOpen}
+        user={selectedUser!}
+        onOpenChange={setDrawerOpen}
+      />
     </>
   );
 };
