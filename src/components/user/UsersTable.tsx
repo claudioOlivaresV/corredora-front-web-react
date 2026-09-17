@@ -1,10 +1,12 @@
 import { useUsersTable } from "../../hooks/useUserTable";
-import { Edit } from "lucide-react";
+import { Edit, UserCheck, UserX } from "lucide-react";
 import { ErrorState } from "../shared/ErrorState";
 import { Loading } from "../shared/Loading";
 import type { UserResponseTable } from "../../shared/types/types";
 import { UsersKpiCards } from "./UsersKpi";
 import { UsersFilters } from "./UsersFilters";
+import { UserDrawer } from "../../pages/users/UserDrawer";
+import { ConfirmModal } from "../shared/ConfirmModal";
 
 export const UsersTable = () => {
   const {
@@ -19,6 +21,15 @@ export const UsersTable = () => {
     formatDate,
     search,
     setSearch,
+    drawerOpen,
+    selectedUser,
+    handleEdit,
+    setDrawerOpen,
+    confirmModalOpen,
+    closeConfirmModal,
+    userToToggle,
+    confirmToggleUser,
+    handleToggleUser,
   } = useUsersTable();
 
   if (isLoading) {
@@ -132,7 +143,24 @@ export const UsersTable = () => {
                       <div className="flex justify-end gap-2">
                         <button
                           type="button"
+                          title={
+                            user.active
+                              ? "Desactivar usuario"
+                              : "Activar usuario"
+                          }
+                          onClick={() => handleToggleUser(user)}
+                          className="rounded p-2 text-on-surface-variant transition-colors hover:bg-surface-container hover:text-obsidian"
+                        >
+                          {user.active ? (
+                            <UserX size={18} />
+                          ) : (
+                            <UserCheck size={18} />
+                          )}
+                        </button>
+                        <button
+                          type="button"
                           title="Editar usuario"
+                          onClick={() => handleEdit(user)}
                           className="rounded p-2 text-on-surface-variant transition-colors hover:bg-surface-container hover:text-obsidian"
                         >
                           <Edit size={18} />
@@ -171,6 +199,23 @@ export const UsersTable = () => {
           </div>
         </div>
       </div>
+      <UserDrawer
+        open={drawerOpen}
+        user={selectedUser!}
+        onOpenChange={setDrawerOpen}
+      />
+      <ConfirmModal
+        open={confirmModalOpen}
+        title={userToToggle?.active ? "Desactivar usuario" : "Activar usuario"}
+        description={
+          userToToggle?.active
+            ? `¿Estás seguro de que deseas desactivar a ${userToToggle.name}?`
+            : `¿Estás seguro de que deseas activar a ${userToToggle?.name}?`
+        }
+        confirmText={userToToggle?.active ? "Desactivar" : "Activar"}
+        onConfirm={confirmToggleUser}
+        onCancel={closeConfirmModal}
+      />
     </>
   );
 };

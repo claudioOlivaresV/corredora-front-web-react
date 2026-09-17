@@ -21,7 +21,10 @@ let isLoggingOut = false;
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response?.status === 401 && !isLoggingOut) {
+    const requestUrl = error.config?.url;
+
+    const isLoginRoute = requestUrl === "/auth/login";
+    if (error.response?.status === 401 && !isLoginRoute && !isLoggingOut) {
       isLoggingOut = true;
 
       store.dispatch(logout());
