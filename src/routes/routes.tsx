@@ -5,6 +5,8 @@ import ProtectedRoute from "./ProtectedRoute";
 import { Dashboard } from "../pages/dashboard/Dashboard";
 import { Login } from "../pages/auth/Login";
 import { Users } from "../pages/users/Users";
+import RoleRoute from "./RoleRoute";
+import { Contracts } from "../pages/contracts/Contracts";
 
 const AppRoutes = () => {
   return (
@@ -15,12 +17,30 @@ const AppRoutes = () => {
       {/* Privadas */}
       <Route element={<ProtectedRoute />}>
         <Route element={<PrivateLayout />}>
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/users" element={<Users />} />
+          <Route element={<RoleRoute allowedRoles={["ADMIN", "CORREDOR"]} />}>
+            <Route path="/dashboard" element={<Dashboard />} />
+          </Route>
+          <Route element={<RoleRoute allowedRoles={["ADMIN", "CORREDOR"]} />}>
+            <Route path="/users" element={<Users />} />
+          </Route>
+          <Route
+            element={
+              <RoleRoute
+                allowedRoles={[
+                  "ADMIN",
+                  "CORREDOR",
+                  "ARRENDADOR",
+                  "ARRENDATARIO",
+                ]}
+              />
+            }
+          >
+            <Route path="/contracts" element={<Contracts />} />
+          </Route>
+
           {/* 
           <Route path="/properties" element={<div>Properties</div>} />
 
-          <Route path="/contracts" element={<div>Contracts</div>} />
 
           <Route path="/payments" element={<div>Payments</div>} />
 
@@ -29,7 +49,7 @@ const AppRoutes = () => {
       </Route>
 
       {/* Ruta por defecto */}
-      <Route path="*" element={<Navigate to="/dashboard" replace />} />
+      <Route path="*" element={<Navigate to="/contracts" replace />} />
     </Routes>
   );
 };
