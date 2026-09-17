@@ -63,3 +63,11 @@ export interface IResponseCreateUser {
   active: boolean;
   created_at: string;
 }
+
+export interface PasswordFormData {
+  password: string;
+  repassword: string;
+}
+export interface MessageResponse {
+  message: string;
+}

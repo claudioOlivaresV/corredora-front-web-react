@@ -2,6 +2,7 @@ import { useState } from "react";
 import { UsersHeader } from "../../components/user/UserHeader";
 import { UserDrawer } from "./UserDrawer";
 import { UsersTable } from "../../components/user/UsersTable";
+import { Toaster } from "sonner";
 
 export const Users = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -24,6 +25,7 @@ export const Users = () => {
       />
       {/* <UserDrawer />
   <ApiStatusToast /> */}
+      <Toaster />
     </div>
   );
 };

@@ -1,4 +1,3 @@
-import { ShieldCheck } from "lucide-react";
 import { cn } from "cn";
 
 import {
@@ -12,6 +11,8 @@ import {
 import type { UserResponseTable } from "../../shared/types/types";
 
 import { useUserDrawer } from "../../hooks/useUserDrawer";
+import { SecurityInfo } from "../../components/shared/SecurityInfo";
+import ErrorMessage from "../../components/shared/ErrorMessage";
 
 interface UserDrawerProps {
   open: boolean;
@@ -196,27 +197,10 @@ export const UserDrawer = ({ open, onOpenChange, user }: UserDrawerProps) => {
               </div>
 
               {/* SECURITY INFO */}
-              <div className="flex gap-3 rounded bg-surface-container-low p-4">
-                <ShieldCheck size={20} className="mt-0.5 text-copper" />
-
-                <div className="flex flex-col gap-1">
-                  <span className="font-caption text-caption font-medium text-obsidian">
-                    Credenciales Seguras
-                  </span>
-
-                  <span className="font-caption text-caption text-on-surface-variant">
-                    Las credenciales se gestionarán de forma segura mediante la
-                    API.
-                  </span>
-                </div>
-              </div>
+              <SecurityInfo />
 
               {/* API ERROR */}
-              {errorMessage && (
-                <div className="rounded bg-error/10 px-4 py-3 text-sm font-medium text-error">
-                  {errorMessage}
-                </div>
-              )}
+              {errorMessage && <ErrorMessage errorMessage={errorMessage} />}
             </div>
 
             {/* FOOTER */}
