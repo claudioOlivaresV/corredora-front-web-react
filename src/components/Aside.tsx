@@ -1,51 +1,45 @@
+import type { MenuItem, UserRole } from "../shared/types/types";
 import { useAside } from "../hooks/useAside";
 import {
-  BriefcaseBusiness,
   Building2,
   FileText,
   LayoutDashboard,
   LogOut,
   UserRoundCog,
-  Users,
   WalletCards,
 } from "lucide-react";
 import { NavLink } from "react-router-dom";
 
-const menuItems = [
+const menuItems: MenuItem[] = [
   {
     label: "Dashboard",
     path: "/dashboard",
     icon: LayoutDashboard,
+    roles: ["ADMIN", "CORREDOR"],
   },
   {
     label: "Propiedades",
     path: "/properties",
     icon: Building2,
+    roles: ["ADMIN", "CORREDOR"],
   },
   {
     label: "Contratos",
     path: "/contracts",
     icon: FileText,
+    roles: ["ADMIN", "CORREDOR", "ARRENDADOR", "ARRENDATARIO"],
   },
   {
     label: "Pagos",
     path: "/payments",
     icon: WalletCards,
-  },
-  {
-    label: "Clientes",
-    path: "/clients",
-    icon: Users,
-  },
-  {
-    label: "Corredores",
-    path: "/brokers",
-    icon: BriefcaseBusiness,
+    roles: ["ADMIN", "CORREDOR", "ARRENDADOR", "ARRENDATARIO"],
   },
   {
     label: "Usuarios",
     path: "/users",
     icon: UserRoundCog,
+    roles: ["ADMIN"],
   },
 ];
 
@@ -55,6 +49,9 @@ interface MenuProps {
 
 export const Aside = ({ onNavigate }: MenuProps) => {
   const { handleLogout, user } = useAside();
+  const visibleMenuItems = menuItems.filter((item) =>
+    item.roles.includes(user?.role as UserRole),
+  );
   return (
     <div className="flex h-full flex-col justify-between">
       <div className="flex flex-col">
@@ -69,7 +66,7 @@ export const Aside = ({ onNavigate }: MenuProps) => {
         </div>
 
         <nav className="flex flex-col gap-1 px-4">
-          {menuItems.map((item) => {
+          {visibleMenuItems.map((item) => {
             const Icon = item.icon;
 
             return (

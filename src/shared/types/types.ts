@@ -1,3 +1,5 @@
+import type { LayoutDashboard } from "lucide-react";
+
 export interface User {
   id: number;
   email: string;
@@ -70,4 +72,11 @@ export interface PasswordFormData {
 }
 export interface MessageResponse {
   message: string;
+}
+
+export interface MenuItem {
+  label: string;
+  path: string;
+  icon: typeof LayoutDashboard;
+  roles: UserRole[];
 }
