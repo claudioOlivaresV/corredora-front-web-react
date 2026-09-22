@@ -7,6 +7,7 @@ import { UsersKpiCards } from "./UsersKpi";
 import { UsersFilters } from "./UsersFilters";
 import { UserDrawer } from "../../pages/users/UserDrawer";
 import { ConfirmModal } from "../shared/ConfirmModal";
+import { formatDate } from "../../hooks/useFormatDate";
 
 export const UsersTable = () => {
   const {
@@ -18,7 +19,6 @@ export const UsersTable = () => {
     isError,
     retry,
     isRetrying,
-    formatDate,
     search,
     setSearch,
     drawerOpen,

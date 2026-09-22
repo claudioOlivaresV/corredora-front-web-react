@@ -130,10 +130,6 @@ export const useUsersTable = () => {
     });
   };
 
-  const formatDate = (date: string): string => {
-    return new Date(date).toLocaleString("es-CL");
-  };
-
   return {
     users: paginatedUsers,
 
@@ -145,8 +141,6 @@ export const useUsersTable = () => {
     isError: query.isError,
     retry: query.refetch,
     isRetrying: query.isFetching,
-
-    formatDate,
 
     search,
     setSearch: handleSearchChange,

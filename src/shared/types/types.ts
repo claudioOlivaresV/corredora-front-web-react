@@ -80,3 +80,14 @@ export interface MenuItem {
   icon: typeof LayoutDashboard;
   roles: UserRole[];
 }
+export type PropertyStatus = "AVAILABLE" | "RENTED" | "MAINTENANCE";
+export interface PropertyResponse {
+  id: number;
+  address: string;
+  description: string;
+  monthly_rent: number;
+  status: PropertyStatus;
+  owner_id: number;
+  agent_id: number;
+  created_at: string;
+}
