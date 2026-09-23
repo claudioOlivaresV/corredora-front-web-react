@@ -91,3 +91,11 @@ export interface PropertyResponse {
   agent_id: number;
   created_at: string;
 }
+
+export interface PropertyFormData {
+  address: string;
+  description: string;
+  monthly_rent: number | null;
+  owner_id: number;
+  agent_id: number;
+}

@@ -136,6 +136,7 @@ export const useUsersTable = () => {
     currentPage,
     totalPages,
     goToPage,
+    allUsers: query.data,
 
     isLoading: query.isLoading,
     isError: query.isError,
