@@ -130,23 +130,18 @@ export const useUsersTable = () => {
     });
   };
 
-  const formatDate = (date: string): string => {
-    return new Date(date).toLocaleString("es-CL");
-  };
-
   return {
     users: paginatedUsers,
 
     currentPage,
     totalPages,
     goToPage,
+    allUsers: query.data,
 
     isLoading: query.isLoading,
     isError: query.isError,
     retry: query.refetch,
     isRetrying: query.isFetching,
-
-    formatDate,
 
     search,
     setSearch: handleSearchChange,

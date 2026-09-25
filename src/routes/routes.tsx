@@ -7,6 +7,7 @@ import { Login } from "../pages/auth/Login";
 import { Users } from "../pages/users/Users";
 import RoleRoute from "./RoleRoute";
 import { Contracts } from "../pages/contracts/Contracts";
+import { Properties } from "../pages/properties/Properties";
 
 const AppRoutes = () => {
   return (
@@ -37,6 +38,10 @@ const AppRoutes = () => {
           >
             <Route path="/contracts" element={<Contracts />} />
           </Route>
+          <Route element={<RoleRoute allowedRoles={["ADMIN", "CORREDOR"]} />}>
+            <Route path="/properties" element={<Properties />} />
+          </Route>
+          {/* <Route path="/properties" element={<div>Properties</div>} /> */}
 
           {/* 
           <Route path="/properties" element={<div>Properties</div>} />

@@ -26,8 +26,10 @@ export const AppStartup = ({ children }: AppStartupProps) => {
   if (!isReady) {
     return (
       <>
+        <p className="text-sm text-gray-500 text-center">
+          Iniciado Api porfavor espere
+        </p>
         <Loading />
-        <p className="text-sm text-gray-500">Iniciado Api porfavor espere</p>
       </>
     );
   }
