@@ -1,14 +1,7 @@
 import { useProperties } from "../../hooks/useProperties";
 import { formatDate } from "../../hooks/useFormatDate";
 import { Button } from "@base-ui/react";
-import {
-  ArrowLeft,
-  ArrowLeftIcon,
-  ArrowRight,
-  ArrowRightIcon,
-  Edit,
-  HousePlus,
-} from "lucide-react";
+import { ArrowRight, Edit, HousePlus } from "lucide-react";
 import { FilterTable } from "../../components/shared/FilterTable";
 import type { PropertyResponse } from "../../shared/types/types";
 import { HeaderSection } from "../../components/shared/HeaderSection";
@@ -17,7 +10,16 @@ import { ModalProperties } from "../../components/properties/ModalProperties";
 
 export const Properties = () => {
   const [modalOpen, setModalOpen] = useState(false);
+  const [activePropery, setActivePropery] = useState<PropertyResponse | null>(
+    null,
+  );
   const handleCreate = () => {
+    setModalOpen(true);
+  };
+
+  const handleEdit = (property: PropertyResponse) => {
+    console.log(property);
+    setActivePropery(property);
     setModalOpen(true);
   };
   const { properties, search, setSearch, currentPage, goToPage, totalPages } =
@@ -117,7 +119,7 @@ export const Properties = () => {
                             <Button
                               type="button"
                               title="Editar usuario"
-                              // onClick={() => handleEdit(user)}
+                              onClick={() => handleEdit(property)}
                               className="cursor-pointer rounded p-2 text-on-surface-variant transition-colors hover:bg-surface-container hover:text-obsidian"
                             >
                               <Edit size={18} />
@@ -165,7 +167,12 @@ export const Properties = () => {
           </div>
         </div>
       </div>
-      <ModalProperties open={modalOpen} onOpenChange={setModalOpen} />
+      <ModalProperties
+        open={modalOpen}
+        onOpenChange={setModalOpen}
+        property={activePropery!}
+        setActivePropery={setActivePropery}
+      />
     </>
   );
 };

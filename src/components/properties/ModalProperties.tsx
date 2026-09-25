@@ -5,9 +5,10 @@ import {
   DialogTitle,
   DialogDescription,
 } from "../../components/ui/dialog";
-import { useFormik } from "formik";
-import { type PropertyFormData } from "../../shared/types/types";
-import * as Yup from "yup";
+import {
+  type PropertyFormData,
+  type PropertyResponse,
+} from "../../shared/types/types";
 import { cn } from "cn";
 import { toast } from "sonner";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -15,59 +16,44 @@ import ErrorMessage from "../shared/ErrorMessage";
 import { createProperty } from "../../services/createProperty.service";
 import { usePropertyUsers } from "../../hooks/properties/usePropertyUsers";
 import { useErrorMessage } from "../../hooks/shared/useErrorMessage";
+import { usePropertyForm } from "../../hooks/properties/usePropertyForm";
+import { updateProperty } from "../../services/updateProperty.service";
+import { useSelector } from "react-redux";
+import type { RootState } from "@/store/store";
 
 interface ModalPropertiesProps {
   open: boolean;
+  property?: PropertyResponse;
   onOpenChange: (open: boolean) => void;
+  setActivePropery: (property: null) => void;
 }
 
 export const ModalProperties = ({
   open,
   onOpenChange,
+  setActivePropery,
+  property,
 }: ModalPropertiesProps) => {
-  const isEdit = Boolean(false);
+  const isEdit = Boolean(property);
   const queryClient = useQueryClient();
   const { errorMessage, setError } = useErrorMessage();
 
   const { owners, agents } = usePropertyUsers();
-
-  const initialValues: PropertyFormData = {
-    address: "",
-    description: "",
-    monthly_rent: null,
-    owner_id: 0,
-    agent_id: 0,
-  };
-  const validationSchema = Yup.object({
-    address: Yup.string()
-      .required("La dirección es obligatoria")
-      .min(3, "La dirección debe tener al menos 3 caracteres")
-      .max(100, "La dirección como máximo 100 caracteres"),
-
-    description: Yup.string()
-      .max(250, "La descripción debe tener como máximo 250 caracteres")
-      .min(10, "La descripción debe tener al menos 10 caracteres")
-
-      .required("La descripción es obligatorio"),
-    monthly_rent: Yup.number()
-      .typeError("El monto debe ser un número")
-      .required("El monto del arriendo es obligatorio")
-      .moreThan(0, "El monto debe ser mayor a 0"),
-
-    owner_id: Yup.number()
-      .required("Selecciona un dueño de la propiedad")
-      .moreThan(0, "Selecciona un dueño de la propiedad"),
-
-    agent_id: Yup.number()
-      .required("Selecciona un corredor")
-      .moreThan(0, "Selecciona un corredor"),
-  });
+  const user = useSelector((state: RootState) => state.auth.user);
+  const isAdmin = user!.role === "ADMIN";
+  console.log(isAdmin, "soy admin");
 
   const mutation = useMutation({
     mutationFn: (values: PropertyFormData) => {
-      // if (isEdit) {
-      //   return updateUser(String(user.id), values);
-      // }
+      if (isEdit) {
+        console.log(values);
+
+        return updateProperty(values, String(property?.id));
+      }
+      if (!isAdmin) {
+        values.agent_id = user!.id;
+      }
+      console.log(values);
 
       return createProperty(values);
     },
@@ -101,31 +87,13 @@ export const ModalProperties = ({
       );
     },
   });
-  const formik = useFormik<PropertyFormData>({
-    initialValues,
-    enableReinitialize: true,
-    validateOnMount: true,
-    validationSchema,
+  const formik = usePropertyForm(property!, mutation.mutate, isAdmin);
 
-    onSubmit: (values) => {
-      // setErrorMessage("");
-
-      const data: PropertyFormData = {
-        address: values.address,
-        description: values.description,
-        monthly_rent: values.monthly_rent,
-        owner_id: Number(values.owner_id),
-        agent_id: Number(values.agent_id),
-      };
-      console.log("data enviada:", data);
-
-      mutation.mutate(data);
-    },
-  });
   const handleClose = () => {
     formik.resetForm();
     setError("");
     onOpenChange(false);
+    setActivePropery(null);
   };
   return (
     <Dialog open={open} onOpenChange={handleClose}>
@@ -233,40 +201,42 @@ export const ModalProperties = ({
               </span>
             )}
           </div>
-          <div className="flex flex-col gap-2">
-            <label
-              htmlFor="agent_id"
-              className="text-xs font-semibold uppercase tracking-wider text-obsidian"
-            >
-              Corredor Asignado
-            </label>
+          {isAdmin && (
+            <div className="flex flex-col gap-2">
+              <label
+                htmlFor="agent_id"
+                className="text-xs font-semibold uppercase tracking-wider text-obsidian"
+              >
+                Corredor Asignado
+              </label>
 
-            <select
-              id="agent_id"
-              name="agent_id"
-              value={formik.values.agent_id}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              className={cn(
-                "rounded bg-surface-container-low px-4 py-3 text-obsidian outline-none",
-                formik.touched.agent_id &&
-                  formik.errors.agent_id &&
-                  "border border-error",
+              <select
+                id="agent_id"
+                name="agent_id"
+                value={formik.values.agent_id}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                className={cn(
+                  "rounded bg-surface-container-low px-4 py-3 text-obsidian outline-none",
+                  formik.touched.agent_id &&
+                    formik.errors.agent_id &&
+                    "border border-error",
+                )}
+              >
+                <option value={0}>Selecciona Corredor</option>
+                {agents?.map((agent) => (
+                  <option key={agent.id} value={agent.id}>
+                    {agent.name}
+                  </option>
+                ))}
+              </select>
+              {formik.touched.agent_id && formik.errors.agent_id && (
+                <span className="text-xs font-medium text-error">
+                  {formik.errors.agent_id}
+                </span>
               )}
-            >
-              <option value={0}>Selecciona Corredor</option>
-              {agents?.map((agent) => (
-                <option key={agent.id} value={agent.id}>
-                  {agent.name}
-                </option>
-              ))}
-            </select>
-            {formik.touched.agent_id && formik.errors.agent_id && (
-              <span className="text-xs font-medium text-error">
-                {formik.errors.agent_id}
-              </span>
-            )}
-          </div>
+            </div>
+          )}
 
           {/* Monthly rent */}
           <div className="flex flex-col gap-2">
