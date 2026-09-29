@@ -7,14 +7,20 @@ import type { PropertyResponse } from "../../shared/types/types";
 import { HeaderSection } from "../../components/shared/HeaderSection";
 import { useState } from "react";
 import { ModalProperties } from "../../components/properties/ModalProperties";
+import { useNavigate } from "react-router-dom";
 
 export const Properties = () => {
+  const navigate = useNavigate();
   const [modalOpen, setModalOpen] = useState(false);
   const [activePropery, setActivePropery] = useState<PropertyResponse | null>(
     null,
   );
   const handleCreate = () => {
     setModalOpen(true);
+  };
+
+  const goToDetail = (property: PropertyResponse) => {
+    navigate(`/properties/${property.id}`);
   };
 
   const handleEdit = (property: PropertyResponse) => {
@@ -127,7 +133,7 @@ export const Properties = () => {
                             <Button
                               type="button"
 
-                              // onClick={() => handleToggleUser(user)}
+                              onClick={() => goToDetail(property)}
                               className="cursor-pointer inline-flex items-center gap-1.5 font-headline-md text-[13px] text-copper hover:text-jasper transition-colors uppercase tracking-wider font-medium group-hover:translate-x-0.5 transition-transform"
                             >
                               <span>Ver Detalle</span>

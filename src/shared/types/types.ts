@@ -99,3 +99,21 @@ export interface PropertyFormData {
   owner_id: number;
   agent_id: number;
 }
+export interface PropertyById {
+  id: number;
+  address: string;
+  description: string;
+  monthly_rent: number;
+  status: string;
+  owner_id: number;
+  agent_id: number;
+  created_at: string;
+  contracts: Contract[];
+}
+
+export interface Contract {
+  id: number;
+  start_date: string;
+  end_date: string;
+  status: string;
+}
