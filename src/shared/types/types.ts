@@ -99,3 +99,60 @@ export interface PropertyFormData {
   owner_id: number;
   agent_id: number;
 }
+export interface PropertyById {
+  id: number;
+  address: string;
+  description: string;
+  monthly_rent: number;
+  status: string;
+  owner_id: number;
+  agent_id: number;
+  created_at: string;
+  contracts: Contract[];
+}
+
+export interface Contract {
+  id: number;
+  start_date: string;
+  end_date: string;
+  status: string;
+}
+export interface ContractDetail {
+  id: number;
+  start_date: Date;
+  end_date: Date;
+  monthly_rent: string;
+  status: string;
+  property: Property;
+  tenant: UserInfo;
+  payments: Payment[];
+}
+
+export interface Payment {
+  id: number;
+  contract_id: number;
+  due_date: Date;
+  amount: string;
+  paid_at: Date | null;
+  status: StatusContract;
+  created_at: Date;
+}
+
+export type StatusContract = "ACTIVE" | "FINISHED" | "CANCELLED";
+
+export interface Property {
+  id: number;
+  address: string;
+  description: string;
+  monthly_rent: string;
+  status: string;
+  owner: UserInfo;
+  agent: UserInfo;
+}
+
+export interface UserInfo {
+  id: number;
+  name: string;
+  email: string;
+  role: UserRole;
+}
