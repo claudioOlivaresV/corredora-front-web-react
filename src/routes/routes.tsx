@@ -45,6 +45,9 @@ const AppRoutes = () => {
           <Route element={<RoleRoute allowedRoles={["ADMIN", "CORREDOR"]} />}>
             <Route path="/properties/:id" element={<ProperyDetail />} />
           </Route>
+          <Route element={<RoleRoute allowedRoles={["ADMIN", "CORREDOR"]} />}>
+            <Route path="/contracts/:id" element={<Contracts />} />
+          </Route>
           {/* <Route path="/properties" element={<div>Properties</div>} /> */}
 
           {/* 

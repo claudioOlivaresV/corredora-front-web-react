@@ -1,35 +1,41 @@
 import { HeaderSection } from "../../components/shared/HeaderSection";
 import { getPropertyDetail } from "../../services/getPropertyDetail";
 import { useQuery } from "@tanstack/react-query";
-import React, { useState } from "react";
-import { useParams } from "react-router-dom";
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "../../components/ui/collapsible";
-import { ChevronDown } from "lucide-react";
+import { useNavigate, useParams } from "react-router-dom";
+import { ArrowLeft, ArrowRight } from "lucide-react";
+import { Button } from "@base-ui/react";
+import { formatDate } from "../../hooks/useFormatDate";
+import type { Contract } from "../../shared/types/types";
+import { ErrorState } from "../../components/shared/ErrorState";
+import { Loading } from "../../components/shared/Loading";
 export const ProperyDetail = () => {
   const { id } = useParams<{ id: string }>();
-  const [isOpen, setIsOpen] = useState(false);
-
+  const navigate = useNavigate();
   const {
     data: property,
-    isLoading,
+    isPending,
     isError,
-    error,
+    isFetching,
+    refetch,
   } = useQuery({
     queryKey: ["property-detail", id],
     queryFn: () => getPropertyDetail(id!),
     enabled: Boolean(id),
     staleTime: 5 * 60 * 1000,
+    retry: false,
   });
-  if (isLoading) {
-    return <div>Cargando propiedad...</div>;
+  const goToDetail = (contract: Contract) => {
+    navigate(`/contract/${contract.id}`);
+  };
+  const handleBack = () => {
+    navigate(-1);
+  };
+  if (isPending) {
+    return <Loading />;
   }
 
   if (isError) {
-    return <div>Error al cargar la propiedad: {error.message}</div>;
+    return <ErrorState onRetry={refetch} isRetrying={isFetching} />;
   }
 
   if (!property) {
@@ -45,7 +51,8 @@ export const ProperyDetail = () => {
             title="Detalle Propiedades"
             subtitle="Gestion de nuestras propiedades"
             textButton="Volver"
-            onCreate={() => console.log("")}
+            iconButton={ArrowLeft}
+            onCreate={() => handleBack()}
           />
           <section className="bg-surface-container-lowest rounded p-8 md:p-10 shadow-sm space-y-8">
             <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-8 pb-8 bg-gradient-to-b from-transparent to-surface/20">
@@ -62,31 +69,6 @@ export const ProperyDetail = () => {
                   <span>{property.description}</span>
                 </div>
               </div>
-              <div className="flex items-center gap-4 p-4 rounded bg-surface-container-low/70">
-                <div className="w-11 h-11 rounded-full bg-obsidian text-on-primary flex items-center justify-center font-label-caps text-label-caps font-semibold">
-                  ER
-                </div>
-                <div>
-                  <span className="block font-caption text-caption text-on-surface-variant uppercase tracking-wider">
-                    Agente Inmobiliario Directo
-                  </span>
-                  <span className="block font-body-md text-body-md font-medium text-obsidian">
-                    Elena Rostova
-                  </span>
-                  <span className="block font-caption text-caption text-secondary">
-                    AESTHET Private Concierge
-                  </span>
-                </div>
-                <a
-                  className="ml-2 w-8 h-8 rounded bg-surface-container flex items-center justify-center text-obsidian hover:bg-sand/60 transition-colors"
-                  href="mailto:concierge@aesthet.cl"
-                  title="Contactar asesor"
-                >
-                  <span className="material-symbols-outlined text-[18px]">
-                    mail
-                  </span>
-                </a>
-              </div>
             </div>
 
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6 pt-2">
@@ -101,50 +83,108 @@ export const ProperyDetail = () => {
                   })}
                 </span>
               </div>
-              <div className="space-y-1">
-                <span className="font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider block">
-                  Vigencia Contractual
-                </span>
-                <span className="font-headline-md text-headline-md text-obsidian">
-                  15 Feb 2024 — 14 Feb 2025
-                </span>
-              </div>
-              <div className="space-y-1">
-                <span className="font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider block">
-                  Próximo Vencimiento
-                </span>
-                <span className="font-headline-md text-headline-md text-copper font-medium">
-                  30 Nov 2024
-                </span>
-              </div>
             </div>
           </section>
-   <Collapsible
-  open={isOpen}
-  onOpenChange={setIsOpen}
-  className="w-full"
->
-  <CollapsibleTrigger className="flex w-full items-center justify-between border-b border-outline-variant py-4">
-    <span className="font-label-caps text-label-caps text-obsidian uppercase tracking-wider">
-      Información adicional
-    </span>
+          <section>
+            <h3 className="font-headline-md text-headline-md text-obsidian">
+              Contratos
+            </h3>
+            {property.contracts.length > 0 && (
+              <div className="overflow-hidden rounded bg-surface-container-lowest shadow-sm">
+                <div className="overflow-x-auto">
+                  <table className="w-full border-collapse text-left">
+                    <thead>
+                      <tr className="bg-surface-container-low/70">
+                        <th className="px-6 py-4 text-xs uppercase tracking-wider text-on-surface-variant">
+                          ID
+                        </th>
 
-    <ChevronDown
-      size={20}
-      className={`transition-transform duration-200 ${
-        isOpen ? "rotate-180" : ""
-      }`}
-    />
-  </CollapsibleTrigger>
+                        <th className="px-6 py-4 text-xs uppercase tracking-wider text-on-surface-variant">
+                          Fecha Inicio
+                        </th>
 
-  <CollapsibleContent>
-    <div className="pt-4">
-      <p className="font-body-md text-body-md text-on-surface-variant">
-        Texto adicional de la propiedad...
-      </p>
-    </div>
-  </CollapsibleContent>
-</Collapsible>
+                        <th className="px-6 py-4 text-xs uppercase tracking-wider text-on-surface-variant">
+                          Fecha de Termino
+                        </th>
+
+                        <th className="px-6 py-4 text-xs uppercase tracking-wider text-on-surface-variant">
+                          Estado
+                        </th>
+
+                        <th className="px-6 py-4 text-right text-xs uppercase tracking-wider text-on-surface-variant">
+                          Acciones
+                        </th>
+                      </tr>
+                    </thead>
+
+                    <tbody className="divide-y divide-surface-container">
+                      {property.contracts.map((contract: Contract) => {
+                        return (
+                          <tr
+                            key={contract.id}
+                            className="transition-colors hover:bg-sand/10"
+                          >
+                            <td className="px-6 py-5 font-caption text-caption text-outline">
+                              {contract.id}
+                            </td>
+
+                            <td className="px-6 py-5">
+                              <div className="flex flex-col">
+                                <span className="text-obsidian">
+                                  {formatDate(contract.start_date)}
+                                </span>
+                              </div>
+                            </td>
+
+                            <td className="px-6 py-5">
+                              <div className="flex flex-col">
+                                <span className="text-obsidian">
+                                  {formatDate(contract.end_date)}
+                                </span>
+                              </div>
+                            </td>
+                            <td className="px-6 py-5">
+                              <span
+                                className={
+                                  contract.status === "ACTIVE"
+                                    ? "rounded-full bg-muted-forest/15 px-3 py-1 text-xs font-medium uppercase tracking-wider text-muted-forest"
+                                    : contract.status === "CANCELLED"
+                                      ? "rounded-full bg-sand/80 px-3 py-1 text-xs font-medium uppercase tracking-wider text-obsidian"
+                                      : "rounded-full bg-slate-200/70 px-3 py-1 text-xs font-medium uppercase tracking-wider text-slate-700"
+                                }
+                              >
+                                {contract.status}
+                              </span>
+                            </td>
+
+                            <td className="px-6 py-5">
+                              <div className="flex justify-end gap-2">
+                                <Button
+                                  type="button"
+                                  onClick={() => goToDetail(contract)}
+                                  className="cursor-pointer inline-flex items-center gap-1.5 font-headline-md text-[13px] text-copper hover:text-jasper transition-colors uppercase tracking-wider font-medium group-hover:translate-x-0.5 transition-transform"
+                                >
+                                  <span>Ver Contrato</span>
+                                  <ArrowRight />
+                                </Button>
+                              </div>
+                            </td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            )}
+            {property.contracts.length === 0 && (
+              <div className="py-4">
+                <p className="font-body-md text-body-md text-on-surface-variant">
+                  No hay contratos asociados a esta propiedad.
+                </p>
+              </div>
+            )}
+          </section>
         </div>
       </div>
     </div>

@@ -1,5 +1,5 @@
 import type { RootState } from "../store/store";
-import { KeyRound, Menu, Search } from "lucide-react";
+import { KeyRound, Menu } from "lucide-react";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { UserPasswordDrawer } from "./user/UserPasswordDrawer";
@@ -25,17 +25,6 @@ export const Header = ({ onMenuClick }: HeaderProps) => {
           >
             <Menu size={24} />
           </button>
-
-          {/* Buscador */}
-          <div className="hidden items-center gap-2 md:flex">
-            <Search size={18} className="text-on-surface-variant" />
-
-            <input
-              type="text"
-              placeholder="Buscar..."
-              className="w-64 bg-transparent text-sm text-on-surface outline-none placeholder:text-on-surface-variant"
-            />
-          </div>
         </div>
 
         <div className="flex items-center gap-3">
