@@ -24,7 +24,9 @@ export const ProperyDetail = () => {
     staleTime: 5 * 60 * 1000,
     retry: false,
   });
-  const goToDetail = (contract: Contract) => {
+  const goToDetailContract = (contract: Contract) => {
+    console.log(contract, "contratooo");
+
     navigate(`/contract/${contract.id}`);
   };
   const handleBack = () => {
@@ -161,7 +163,7 @@ export const ProperyDetail = () => {
                               <div className="flex justify-end gap-2">
                                 <Button
                                   type="button"
-                                  onClick={() => goToDetail(contract)}
+                                  onClick={() => goToDetailContract(contract)}
                                   className="cursor-pointer inline-flex items-center gap-1.5 font-headline-md text-[13px] text-copper hover:text-jasper transition-colors uppercase tracking-wider font-medium group-hover:translate-x-0.5 transition-transform"
                                 >
                                   <span>Ver Contrato</span>

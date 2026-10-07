@@ -21,7 +21,7 @@ export const useLogin = () => {
         }),
       );
 
-      navigate("/dashboard");
+      navigate("/properties");
     },
   });
 

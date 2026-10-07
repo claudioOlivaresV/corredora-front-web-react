@@ -2,7 +2,6 @@ import { Navigate, Route, Routes } from "react-router-dom";
 
 import { PrivateLayout } from "../layouts/PrivateLayout";
 import ProtectedRoute from "./ProtectedRoute";
-import { Dashboard } from "../pages/dashboard/Dashboard";
 import { Login } from "../pages/auth/Login";
 import { Users } from "../pages/users/Users";
 import RoleRoute from "./RoleRoute";
@@ -20,9 +19,6 @@ const AppRoutes = () => {
       <Route element={<ProtectedRoute />}>
         <Route element={<PrivateLayout />}>
           <Route element={<RoleRoute allowedRoles={["ADMIN", "CORREDOR"]} />}>
-            <Route path="/dashboard" element={<Dashboard />} />
-          </Route>
-          <Route element={<RoleRoute allowedRoles={["ADMIN", "CORREDOR"]} />}>
             <Route path="/users" element={<Users />} />
           </Route>
           <Route
@@ -36,9 +32,7 @@ const AppRoutes = () => {
                 ]}
               />
             }
-          >
-            <Route path="/contracts" element={<Contracts />} />
-          </Route>
+          ></Route>
           <Route element={<RoleRoute allowedRoles={["ADMIN", "CORREDOR"]} />}>
             <Route path="/properties" element={<Properties />} />
           </Route>
@@ -61,7 +55,7 @@ const AppRoutes = () => {
       </Route>
 
       {/* Ruta por defecto */}
-      <Route path="*" element={<Navigate to="/contracts" replace />} />
+      <Route path="*" element={<Navigate to="/properties" replace />} />
     </Routes>
   );
 };

@@ -1,39 +1,14 @@
 import type { MenuItem, UserRole } from "../shared/types/types";
 import { useAside } from "../hooks/useAside";
-import {
-  Building2,
-  FileText,
-  LayoutDashboard,
-  LogOut,
-  UserRoundCog,
-  WalletCards,
-} from "lucide-react";
+import { Building2, LogOut, UserRoundCog, WalletCards } from "lucide-react";
 import { NavLink } from "react-router-dom";
 
 const menuItems: MenuItem[] = [
-  {
-    label: "Dashboard",
-    path: "/dashboard",
-    icon: LayoutDashboard,
-    roles: ["ADMIN", "CORREDOR"],
-  },
   {
     label: "Propiedades",
     path: "/properties",
     icon: Building2,
     roles: ["ADMIN", "CORREDOR"],
-  },
-  {
-    label: "Contratos",
-    path: "/contracts",
-    icon: FileText,
-    roles: ["ADMIN", "CORREDOR", "ARRENDADOR", "ARRENDATARIO"],
-  },
-  {
-    label: "Pagos",
-    path: "/payments",
-    icon: WalletCards,
-    roles: ["ADMIN", "CORREDOR", "ARRENDADOR", "ARRENDATARIO"],
   },
   {
     label: "Usuarios",
